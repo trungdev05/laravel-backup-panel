@@ -29,6 +29,6 @@ return [
     |
     */
 
-    'queue' => null,
+    'queue' => 'default',
 
 ];

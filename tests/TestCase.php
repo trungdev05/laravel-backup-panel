@@ -3,8 +3,8 @@
 namespace PavelMironchik\LaravelBackupPanel\Tests;
 
 use Illuminate\Foundation\Application;
-use Livewire\LivewireServiceProvider;
 use PavelMironchik\LaravelBackupPanel\LaravelBackupPanelServiceProvider;
+use Spatie\Backup\BackupServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -18,7 +18,7 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             LaravelBackupPanelServiceProvider::class,
-            LivewireServiceProvider::class,
+            BackupServiceProvider::class,
         ];
     }
 }

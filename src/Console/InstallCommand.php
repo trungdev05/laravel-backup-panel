@@ -3,78 +3,77 @@
 namespace PavelMironchik\LaravelBackupPanel\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class InstallCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $signature = 'laravel-backup-panel:install';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
+    /** @var string */
     protected $description = 'Install all of the Laravel Backup Panel resources';
 
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function handle(): int
     {
         $this->comment('Publishing Laravel Backup Panel service provider...');
-        $this->callSilent('vendor:publish', ['--tag' => 'laravel-backup-panel-provider']);
+        $this->publishOrFail('laravel-backup-panel-provider');
 
         $this->comment('Publishing Laravel Backup Panel assets...');
-        $this->callSilent('vendor:publish', ['--tag' => 'laravel-backup-panel-assets']);
+        $this->publishOrFail('laravel-backup-panel-assets');
 
         $this->comment('Publishing Laravel Backup Panel views...');
-        $this->callSilent('vendor:publish', ['--tag' => 'laravel-backup-panel-views']);
+        $this->publishOrFail('laravel-backup-panel-views');
 
         $this->comment('Publishing Laravel Backup Panel configuration...');
-        $this->callSilent('vendor:publish', ['--tag' => 'laravel-backup-panel-config']);
+        $this->publishOrFail('laravel-backup-panel-config');
 
         $this->registerServiceProvider();
 
         $this->info('Laravel Backup Panel resources installed successfully.');
+
+        return self::SUCCESS;
     }
 
-    protected function registerServiceProvider()
+    private function registerServiceProvider(): void
     {
         $namespace = Str::replaceLast('\\', '', $this->laravel->getNamespace());
+        $provider = "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider";
 
-        $appConfig = file_get_contents(config_path('app.php'));
+        $this->setProviderNamespace($namespace);
 
-        if (Str::contains($appConfig, $namespace.'\\Providers\\LaravelBackupPanelServiceProvider::class')) {
+        if (! ServiceProvider::addProviderToBootstrapFile($provider)) {
+            throw new RuntimeException('Unable to register the Laravel Backup Panel service provider.');
+        }
+    }
+
+    private function setProviderNamespace(string $namespace): void
+    {
+        $providerPath = app_path('Providers/LaravelBackupPanelServiceProvider.php');
+        $providerStub = File::get($providerPath);
+        $namespaceDeclaration = 'namespace App\\Providers;';
+        $applicationNamespaceDeclaration = "namespace {$namespace}\\Providers;";
+
+        if (Str::contains($providerStub, $applicationNamespaceDeclaration)) {
             return;
         }
 
-        file_put_contents(config_path('app.php'), str_replace(
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\LaravelBackupPanelServiceProvider::class,".PHP_EOL,
-            $appConfig
-        ));
+        if (! Str::contains($providerStub, $namespaceDeclaration)) {
+            throw new RuntimeException('Published service provider has an unexpected namespace declaration.');
+        }
 
-        file_put_contents(app_path('Providers/LaravelBackupPanelServiceProvider.php'), str_replace(
-            "namespace App\Providers;",
-            "namespace {$namespace}\Providers;",
-            file_get_contents(app_path('Providers/LaravelBackupPanelServiceProvider.php'))
-        ));
+        File::replace(
+            $providerPath,
+            Str::replace($namespaceDeclaration, $applicationNamespaceDeclaration, $providerStub),
+        );
+    }
+
+    private function publishOrFail(string $tag): void
+    {
+        if ($this->callSilent('vendor:publish', ['--tag' => $tag]) !== self::SUCCESS) {
+            throw new RuntimeException("Unable to publish resources for [{$tag}].");
+        }
     }
 }

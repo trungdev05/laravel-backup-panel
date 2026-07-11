@@ -6,35 +6,30 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use Spatie\Backup\Config\Config as BackupConfig;
 use Spatie\Backup\Tasks\Backup\BackupJobFactory;
 
 class CreateBackupJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable;
 
-    protected $option;
-
-    public function __construct($option = '')
+    public function __construct(public BackupMode $mode)
     {
-        $this->option = $option;
     }
 
-    public function handle()
+    public function handle(): void
     {
-        $backupJob = BackupJobFactory::createFromArray(config('backup'));
+        $backupJob = BackupJobFactory::createFromConfig(app(BackupConfig::class));
 
-        if ($this->option === 'only-db') {
-            $backupJob->dontBackupFilesystem();
-        }
+        match ($this->mode) {
+            BackupMode::Full => null,
+            BackupMode::OnlyDatabase => $backupJob->dontBackupFilesystem(),
+            BackupMode::OnlyFiles => $backupJob->dontBackupDatabases(),
+        };
 
-        if ($this->option === 'only-files') {
-            $backupJob->dontBackupDatabases();
-        }
-
-        if (! empty($this->option)) {
-            $prefix = str_replace('_', '-', $this->option).'-';
-
-            $backupJob->setFilename($prefix.date('Y-m-d-H-i-s').'.zip');
+        if ($this->mode !== BackupMode::Full) {
+            $backupJob->setFilename($this->mode->value.'-'.date('Y-m-d-H-i-s').'.zip');
         }
 
         $backupJob->run();

@@ -9,54 +9,58 @@ use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
 
 class InstallCommandTest extends TestCase
 {
-    public function test_install_command_publishes_assets()
+    public function test_install_command_publishes_assets(): void
     {
         $directory = public_path('vendor/laravel_backup_panel');
 
-        $this->assertTrue(File::exists($directory.'/app.css'));
-        $this->assertTrue(File::exists($directory.'/bootstrap.css'));
+        $this->assertTrue(File::exists($directory.'/css/app.css'));
+        $this->assertTrue(File::exists($directory.'/css/bootstrap.min.css'));
+        $this->assertTrue(File::exists($directory.'/js/app.js'));
+        $this->assertTrue(File::exists($directory.'/js/bootstrap.bundle.min.js'));
     }
 
-    public function test_install_command_publishes_views()
+    public function test_install_command_publishes_views(): void
     {
         $directory = resource_path('views/vendor/laravel_backup_panel');
 
-        $this->assertTrue(File::exists($directory.'/livewire/app.blade.php'));
+        $this->assertTrue(File::exists($directory.'/index.blade.php'));
         $this->assertTrue(File::exists($directory.'/layout.blade.php'));
     }
 
-    public function test_install_command_publishes_config()
+    public function test_install_command_publishes_config(): void
     {
         $this->assertTrue(File::exists(config_path('laravel_backup_panel.php')));
     }
 
-    public function test_install_command_publishes_provider()
+    public function test_install_command_publishes_provider(): void
     {
         $this->assertTrue(File::exists(app_path('Providers/LaravelBackupPanelServiceProvider.php')));
     }
 
-    public function test_install_command_sets_namespace_for_provider()
+    public function test_install_command_sets_namespace_for_provider(): void
     {
         $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
-
         $provider = file_get_contents(app_path('Providers/LaravelBackupPanelServiceProvider.php'));
 
-        $this->assertTrue(Str::contains(
-            $provider,
-            "namespace {$namespace}\Providers;"
-        ));
+        $this->assertTrue(Str::contains($provider, "namespace {$namespace}\\Providers;"));
     }
 
-    public function test_install_command_registers_provider()
+    public function test_install_command_registers_provider(): void
     {
         $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
+        $providers = file_get_contents(base_path('bootstrap/providers.php'));
 
-        $appConfig = file_get_contents(config_path('app.php'));
+        $this->assertTrue(Str::contains($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
+    }
 
-        $this->assertTrue(Str::contains(
-            $appConfig,
-            "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\LaravelBackupPanelServiceProvider::class,".PHP_EOL
-        ));
+    public function test_install_command_registers_the_provider_once(): void
+    {
+        Artisan::call('laravel-backup-panel:install');
+
+        $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
+        $providers = file_get_contents(base_path('bootstrap/providers.php'));
+
+        $this->assertSame(1, substr_count($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
     }
 
     protected function setUp(): void
@@ -73,42 +77,34 @@ class InstallCommandTest extends TestCase
         parent::tearDown();
     }
 
-    private function clearFiles()
+    private function clearFiles(): void
     {
-        // Clear assets.
-        $path = public_path('vendor/laravel_backup_panel');
-        if (File::exists($path)) {
-            File::deleteDirectory($path);
+        foreach ([
+            public_path('vendor/laravel_backup_panel'),
+            resource_path('views/vendor/laravel_backup_panel'),
+        ] as $path) {
+            if (File::exists($path)) {
+                File::deleteDirectory($path);
+            }
         }
 
-        // Clear views.
-        $path = resource_path('views/vendor/laravel_backup_panel');
-        if (File::exists($path)) {
-            File::deleteDirectory($path);
+        foreach ([
+            config_path('laravel_backup_panel.php'),
+            app_path('Providers/LaravelBackupPanelServiceProvider.php'),
+        ] as $path) {
+            if (File::exists($path)) {
+                File::delete($path);
+            }
         }
 
-        // Clear config.
-        $path = config_path('laravel_backup_panel.php');
-        if (File::exists($path)) {
-            File::delete($path);
-        }
-
-        // Clear provider.
-        $path = app_path('Providers/LaravelBackupPanelServiceProvider.php');
-        if (File::exists($path)) {
-            File::delete($path);
-        }
-
-        // Reset providers.
         $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
+        $providersPath = base_path('bootstrap/providers.php');
+        $providers = file_get_contents($providersPath);
 
-        $appConfig = file_get_contents(config_path('app.php'));
-        if (Str::contains($appConfig, $namespace.'\\Providers\\LaravelBackupPanelServiceProvider::class')) {
-            file_put_contents(config_path('app.php'), str_replace(
-                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL."        {$namespace}\Providers\LaravelBackupPanelServiceProvider::class,".PHP_EOL,
-                "{$namespace}\\Providers\EventServiceProvider::class,".PHP_EOL,
-                $appConfig
-            ));
-        }
+        file_put_contents($providersPath, str_replace(
+            "    {$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class,".PHP_EOL,
+            '',
+            $providers
+        ));
     }
 }

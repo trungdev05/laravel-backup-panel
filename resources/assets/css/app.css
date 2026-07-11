@@ -1,9 +1,5 @@
-.toastify-custom {
+.toast {
     border-radius: 0.45rem;
-    height: 30px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    font-size: 14px;
 }
 
 button {
@@ -64,19 +60,6 @@ table thead th {
 .btn-refresh {
     font-size: 0.9rem;
     line-height: 1.6;
-}
-
-.btn-refresh.loading svg {
-    animation: loading-spinner 1s linear infinite;
-}
-
-@keyframes loading-spinner {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
 }
 
 .action-button svg {

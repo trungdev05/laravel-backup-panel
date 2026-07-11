@@ -26,17 +26,15 @@ Also, some users reported about hitting a rate limit of Dropbox API._
 
 ## Requirements
 
-Make sure you meet [the requirements for installing spatie/laravel-backup](https://docs.spatie.be/laravel-backup/v6/requirements).
-Since this package requires the spatie/laravel-backup version 6.11.12 or higher, it also requires PHP 7.3 and Laravel 6.0 or higher.
+Laravel Backup Panel 3 requires PHP 8.3 or newer, Laravel 12.40 or 13, and spatie/laravel-backup 10.
 
-### Using an older version of PHP, Laravel, spatie/laravel-backup?
+### Using an older version of PHP, Laravel, or spatie/laravel-backup?
 
-Just use the older version of this package, see the `v1` branch.
+Use the 2.x release line of this package.
 
 ## Installation
 
-First you must install [spatie/laravel-backup](https://docs.spatie.be/laravel-backup) into your Laravel app. 
-The installation instructions are [here](https://docs.spatie.be/laravel-backup/v6/installation-and-setup). 
+First install [spatie/laravel-backup](https://github.com/spatie/laravel-backup) into your Laravel app.
 When successful, running `php artisan backup:run` on the terminal should create a backup and `php artisan backup:list` should return a list with an overview of all backup disks.
 
 You may use composer to install Laravel Backup Panel into your project:
@@ -52,10 +50,10 @@ $ php artisan laravel-backup-panel:install
 ```
 
 This will do the following:
-- place CSS files into `public/vendor/laravel_backup_panel` directory
+- place Bootstrap CSS and JavaScript files into `public/vendor/laravel_backup_panel` directory
 - place Blade templates into `resources/views/vendor/laravel_backup_panel` directory
 - add config file `config/laravel_backup_panel.php`
-- register service provider `app/Providers/LaravelBackupPanelServiceProvider.php`
+- register service provider in `bootstrap/providers.php`
 
 ### Updating
 
@@ -66,9 +64,9 @@ $ php artisan vendor:publish --tag=laravel-backup-panel-assets --force
 $ php artisan vendor:publish --tag=laravel-backup-panel-views --force
 ```
 
-### Upgrading
+### Upgrading to 3.x
 
-See the [Wiki](https://github.com/pavel-mironchik/laravel-backup-panel/wiki/Upgrade-Guide) for the instructions how to upgrade from version 1.
+3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets and views after upgrading; custom published Livewire views must be replaced with the new Blade views.
 
 ## Configuration
 

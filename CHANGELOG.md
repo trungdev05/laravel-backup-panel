@@ -2,6 +2,13 @@
 
 All notable changes to `laravel-backup-panel` will be documented in this file
 
+## 3.0.0 - Unreleased
+
+- Add support for PHP 8.3+, Laravel 12.40 through 13, and spatie/laravel-backup 10
+- Use one explicit Spatie Backup contract without compatibility adapters
+- Replace Livewire with server-rendered Blade views and progressive JavaScript
+- Upgrade bundled assets to local Bootstrap 5.3.8 and remove remote frontend dependencies
+
 ## 2.2.0 - 2022-05-05
 
 - Add support for spatie/laravel-backup ^8.0
