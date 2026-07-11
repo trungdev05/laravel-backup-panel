@@ -1,12 +1,12 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Actions;
+namespace Trungdev05\LaravelBackupPanel\Actions;
 
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\View as ViewFacade;
-use PavelMironchik\LaravelBackupPanel\Http\Requests\ShowBackupPanelRequest;
-use PavelMironchik\LaravelBackupPanel\Support\BackupDestinationRepository;
-use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
+use Trungdev05\LaravelBackupPanel\Http\Requests\ShowBackupPanelRequest;
+use Trungdev05\LaravelBackupPanel\Support\BackupDestinationRepository;
+use Trungdev05\LaravelBackupPanel\Support\BackupPanelConfiguration;
 
 final readonly class ShowBackupPanelAction
 {

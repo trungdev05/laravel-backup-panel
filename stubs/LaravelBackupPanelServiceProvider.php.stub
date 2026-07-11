@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use PavelMironchik\LaravelBackupPanel\LaravelBackupPanelApplicationServiceProvider;
+use Trungdev05\LaravelBackupPanel\LaravelBackupPanelApplicationServiceProvider;
 
 class LaravelBackupPanelServiceProvider extends LaravelBackupPanelApplicationServiceProvider
 {

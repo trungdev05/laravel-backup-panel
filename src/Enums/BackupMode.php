@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Enums;
+namespace Trungdev05\LaravelBackupPanel\Enums;
 
 enum BackupMode: string
 {

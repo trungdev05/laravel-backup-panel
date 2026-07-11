@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Support;
+namespace Trungdev05\LaravelBackupPanel\Support;
 
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;

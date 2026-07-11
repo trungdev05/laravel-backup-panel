@@ -1,11 +1,11 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Support\Facades\Config;
 use InvalidArgumentException;
-use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
+use Trungdev05\LaravelBackupPanel\Support\BackupPanelConfiguration;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class BackupPanelConfigurationTest extends TestCase
 {

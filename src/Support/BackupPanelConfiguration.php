@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Support;
+namespace Trungdev05\LaravelBackupPanel\Support;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;

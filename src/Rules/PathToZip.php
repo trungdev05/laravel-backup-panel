@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Rules;
+namespace Trungdev05\LaravelBackupPanel\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;

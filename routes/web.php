@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use PavelMironchik\LaravelBackupPanel\Actions\CreateBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\DeleteBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\DownloadBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\ShowBackupPanelAction;
+use Trungdev05\LaravelBackupPanel\Actions\CreateBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\DeleteBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\DownloadBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\ShowBackupPanelAction;
 
 Route::get('/', ShowBackupPanelAction::class)->name('laravel-backup-panel.index');
 Route::post('/backups', CreateBackupAction::class)->name('laravel-backup-panel.backups.store');

@@ -1,10 +1,10 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Routing\Route;
-use PavelMironchik\LaravelBackupPanel\Http\Middleware\Authenticate;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
+use Trungdev05\LaravelBackupPanel\Http\Middleware\Authenticate;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class MiddlewareTest extends TestCase
 {

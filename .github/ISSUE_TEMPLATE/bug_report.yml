@@ -1,0 +1,52 @@
+name: Bug report
+description: Report a reproducible defect in Laravel Backup Panel.
+title: "[Bug]: "
+labels:
+  - "type: bug"
+  - "status: needs-triage"
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, backup archives, or security-sensitive details. Use private vulnerability reporting for security issues.
+  - type: input
+    id: package-version
+    attributes:
+      label: Package version
+      description: The installed Laravel Backup Panel version.
+      placeholder: 3.0.0-beta.1
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include PHP, Laravel, spatie/laravel-backup, queue driver, cache driver, and storage disk.
+      placeholder: |
+        PHP: 8.3.x
+        Laravel: 13.x
+        spatie/laravel-backup: 10.x
+        Queue: redis
+        Cache: redis
+        Disk: s3
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide the smallest deterministic sequence.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include a sanitized exception or log excerpt when available.
+    validations:
+      required: true

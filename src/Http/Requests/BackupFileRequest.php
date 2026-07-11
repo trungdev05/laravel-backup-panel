@@ -1,11 +1,11 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Http\Requests;
+namespace Trungdev05\LaravelBackupPanel\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use PavelMironchik\LaravelBackupPanel\Rules\BackupDisk;
-use PavelMironchik\LaravelBackupPanel\Rules\PathToZip;
+use Trungdev05\LaravelBackupPanel\Rules\BackupDisk;
+use Trungdev05\LaravelBackupPanel\Rules\PathToZip;
 
 final class BackupFileRequest extends FormRequest
 {

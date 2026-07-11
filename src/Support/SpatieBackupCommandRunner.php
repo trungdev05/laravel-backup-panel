@@ -1,9 +1,9 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Support;
+namespace Trungdev05\LaravelBackupPanel\Support;
 
 use Illuminate\Support\Facades\Artisan;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
 
 final class SpatieBackupCommandRunner implements BackupCommandRunner
 {

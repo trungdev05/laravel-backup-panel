@@ -1,8 +1,8 @@
 # Laravel Backup Panel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
-[![Tests](https://github.com/pavel-mironchik/laravel-backup-panel/workflows/Tests/badge.svg)](https://github.com/pavel-mironchik/laravel-backup-panel/actions?query=workflow%3ATests)
-[![Total Downloads](https://img.shields.io/packagist/dt/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/trungdev05/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/trungdev05/laravel-backup-panel)
+[![CI](https://github.com/trungdev05/laravel-backup-panel/actions/workflows/ci.yml/badge.svg)](https://github.com/trungdev05/laravel-backup-panel/actions/workflows/ci.yml)
+[![Total Downloads](https://img.shields.io/packagist/dt/trungdev05/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/trungdev05/laravel-backup-panel)
 
 Laravel Backup Panel provides a dashboard for [spatie/laravel-backup](https://github.com/spatie/laravel-backup) package.
 It lets you:
@@ -25,10 +25,6 @@ Also, some users reported about hitting a rate limit of Dropbox API._
 
 Laravel Backup Panel 3 requires PHP 8.3 or newer, Laravel 12.40 or 13, and spatie/laravel-backup 10.
 
-### Using an older version of PHP, Laravel, or spatie/laravel-backup?
-
-Use the 2.x release line of this package.
-
 ## Installation
 
 First install [spatie/laravel-backup](https://github.com/spatie/laravel-backup) into your Laravel app.
@@ -37,7 +33,7 @@ When successful, running `php artisan backup:run` on the terminal should create 
 You may use composer to install Laravel Backup Panel into your project:
 
 ```bash
-$ composer require pavel-mironchik/laravel-backup-panel
+$ composer require trungdev05/laravel-backup-panel
 ```
 
 After installing, publish its resources using provided Artisan command:
@@ -60,10 +56,6 @@ When updating the package, do not forget to re-publish resources:
 $ php artisan vendor:publish --tag=laravel-backup-panel-assets --force
 $ php artisan vendor:publish --tag=laravel-backup-panel-views --force
 ```
-
-### Upgrading to 3.x
-
-3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets and views after upgrading; custom published Livewire views must be replaced with the new Blade views.
 
 ## Configuration
 
@@ -135,19 +127,15 @@ $ composer test
 
 ### Security
 
-If you discover any security related issues, please email mironchikpavel@gmail.com instead of using the issue tracker.
+Please read the [security policy](SECURITY.md). Report vulnerabilities privately; do not open a public issue.
 
 ## Support
 
-If you like this package, consider supporting it. You can use this in such ways:
-1. If you don't have a Digital Ocean account yet - use this link https://m.do.co/c/d9cd33e44510 to register one. You will get $100 in credit over 60 days, and once you spent $25 - I will get $25 too. This will cover the cost of hosting my nonprofit open-source projects there.
-1. If you have some Laravel/Vue project/work to be done, then contact me - mironchikpavel@gmail.com. I work as a freelancer (mostly at UpWork), and such a project can pay my bills.
-
-And any other help will be appreciated.
+Please read [SUPPORT](SUPPORT.md) for usage questions and help.
 
 ## Credits
 
-- [Pavel Mironchik](https://github.com/pavel-mironchik)
+- [trungdev05](https://github.com/trungdev05)
 - [All Contributors](../../contributors)
 
 ## License

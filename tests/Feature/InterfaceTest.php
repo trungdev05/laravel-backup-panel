@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
@@ -9,15 +9,15 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use InvalidArgumentException;
-use PavelMironchik\LaravelBackupPanel\Actions\CreateBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\DeleteBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\DownloadBackupAction;
-use PavelMironchik\LaravelBackupPanel\Actions\ShowBackupPanelAction;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
-use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
-use PavelMironchik\LaravelBackupPanel\LaravelBackupPanel;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Trungdev05\LaravelBackupPanel\Actions\CreateBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\DeleteBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\DownloadBackupAction;
+use Trungdev05\LaravelBackupPanel\Actions\ShowBackupPanelAction;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Jobs\CreateBackupJob;
+use Trungdev05\LaravelBackupPanel\LaravelBackupPanel;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class InterfaceTest extends TestCase
 {

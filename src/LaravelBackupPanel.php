@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel;
+namespace Trungdev05\LaravelBackupPanel;
 
 use Closure;
 use Illuminate\Http\Request;

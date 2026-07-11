@@ -1,7 +1,8 @@
 {
-    "name": "pavel-mironchik/laravel-backup-panel",
+    "name": "trungdev05/laravel-backup-panel",
     "description": "An interface for Spatie Laravel Backup package",
-    "homepage": "https://github.com/pavel-mironchik/laravel-backup-panel",
+    "type": "library",
+    "homepage": "https://github.com/trungdev05/laravel-backup-panel",
     "keywords": [
         "backup",
         "database",
@@ -11,10 +12,13 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Pavel Mironchik",
-            "email": "mironchikpavel@gmail.com"
+            "name": "trungdev05"
         }
     ],
+    "support": {
+        "issues": "https://github.com/trungdev05/laravel-backup-panel/issues",
+        "source": "https://github.com/trungdev05/laravel-backup-panel"
+    },
     "require": {
         "php": "^8.3",
         "laravel/framework": "^12.40|^13.0",
@@ -30,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "PavelMironchik\\LaravelBackupPanel\\": "src"
+            "Trungdev05\\LaravelBackupPanel\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PavelMironchik\\LaravelBackupPanel\\Tests\\": "tests"
+            "Trungdev05\\LaravelBackupPanel\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -49,7 +53,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "PavelMironchik\\LaravelBackupPanel\\LaravelBackupPanelServiceProvider"
+                "Trungdev05\\LaravelBackupPanel\\LaravelBackupPanelServiceProvider"
             ]
         }
     }

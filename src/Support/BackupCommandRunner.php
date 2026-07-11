@@ -1,8 +1,8 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Support;
+namespace Trungdev05\LaravelBackupPanel\Support;
 
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
 
 interface BackupCommandRunner
 {

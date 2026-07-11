@@ -1,16 +1,16 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
-use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
-use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
-use PavelMironchik\LaravelBackupPanel\Support\BackupFilename;
-use PavelMironchik\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
 use RuntimeException;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Jobs\CreateBackupJob;
+use Trungdev05\LaravelBackupPanel\Support\BackupCommandRunner;
+use Trungdev05\LaravelBackupPanel\Support\BackupFilename;
+use Trungdev05\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class CreateBackupJobTest extends TestCase
 {

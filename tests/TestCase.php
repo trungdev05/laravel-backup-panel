@@ -1,9 +1,9 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests;
+namespace Trungdev05\LaravelBackupPanel\Tests;
 
-use PavelMironchik\LaravelBackupPanel\LaravelBackupPanelServiceProvider;
 use Spatie\Backup\BackupServiceProvider;
+use Trungdev05\LaravelBackupPanel\LaravelBackupPanelServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

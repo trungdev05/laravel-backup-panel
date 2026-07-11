@@ -1,11 +1,11 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Rules;
+namespace Trungdev05\LaravelBackupPanel\Rules;
 
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Translation\PotentiallyTranslatedString;
-use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
+use Trungdev05\LaravelBackupPanel\Support\BackupPanelConfiguration;
 
 class BackupDisk implements ValidationRule
 {

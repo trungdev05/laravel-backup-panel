@@ -1,9 +1,9 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Support;
+namespace Trungdev05\LaravelBackupPanel\Support;
 
 use Illuminate\Support\Str;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
 
 final readonly class BackupFilename
 {
