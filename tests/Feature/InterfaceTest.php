@@ -2,8 +2,8 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
 
-use Illuminate\Support\Collection;
 use Illuminate\Routing\Route;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
@@ -124,7 +124,7 @@ class InterfaceTest extends TestCase
     }
 
     /**
-     * @param class-string $action
+     * @param  class-string  $action
      */
     private function assertRouteUses(string $name, string $action): void
     {

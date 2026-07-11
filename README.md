@@ -2,7 +2,6 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
 [![Tests](https://github.com/pavel-mironchik/laravel-backup-panel/workflows/Tests/badge.svg)](https://github.com/pavel-mironchik/laravel-backup-panel/actions?query=workflow%3ATests)
-[![StyleCI](https://github.styleci.io/repos/231844000/shield?branch=master)](https://github.styleci.io/repos/231844000)
 [![Total Downloads](https://img.shields.io/packagist/dt/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
 
 Laravel Backup Panel provides a dashboard for [spatie/laravel-backup](https://github.com/spatie/laravel-backup) package.

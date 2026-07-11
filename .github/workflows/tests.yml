@@ -36,3 +36,5 @@ jobs:
         run: composer analyse
       - name: Verify Rector
         run: composer rector:test
+      - name: Verify code style
+        run: composer format:test

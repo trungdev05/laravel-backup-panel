@@ -10,7 +10,7 @@ use Spatie\Backup\Config\Config as BackupConfig;
 class BackupDisk implements ValidationRule
 {
     /**
-     * @param Closure(string, string|null=): PotentiallyTranslatedString $fail
+     * @param  Closure(string, string|null=): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {

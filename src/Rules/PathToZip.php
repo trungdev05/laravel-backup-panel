@@ -9,7 +9,7 @@ use Illuminate\Translation\PotentiallyTranslatedString;
 class PathToZip implements ValidationRule
 {
     /**
-     * @param Closure(string, string|null=): PotentiallyTranslatedString $fail
+     * @param  Closure(string, string|null=): PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {

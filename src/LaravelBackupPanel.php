@@ -16,7 +16,6 @@ final class LaravelBackupPanel
 
     /**
      * Determine if the given request can access the Laravel Backup Panel dashboard.
-     *
      */
     public static function check(Request $request): bool
     {
@@ -24,7 +23,7 @@ final class LaravelBackupPanel
     }
 
     /**
-     * @param Closure(Request): bool $callback
+     * @param  Closure(Request): bool  $callback
      */
     public static function auth(Closure $callback): void
     {

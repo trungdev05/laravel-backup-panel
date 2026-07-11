@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\View as ViewFacade;
 use PavelMironchik\LaravelBackupPanel\Http\Requests\ShowBackupPanelRequest;
 use PavelMironchik\LaravelBackupPanel\Support\BackupDestinationRepository;
+use Spatie\Backup\Config\Config;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 
@@ -35,7 +36,7 @@ final readonly class ShowBackupPanelAction
     private function backupStatuses(): Collection
     {
         return BackupDestinationStatusFactory::createForMonitorConfig(
-            app(\Spatie\Backup\Config\Config::class)->monitoredBackups,
+            app(Config::class)->monitoredBackups,
         );
     }
 }

@@ -16,9 +16,7 @@ class CreateBackupJob implements ShouldQueue
     use InteractsWithQueue;
     use Queueable;
 
-    public function __construct(public BackupMode $mode)
-    {
-    }
+    public function __construct(public BackupMode $mode) {}
 
     public function handle(): void
     {

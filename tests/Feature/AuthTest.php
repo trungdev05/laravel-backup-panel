@@ -30,7 +30,7 @@ class AuthTest extends TestCase
     {
         LaravelBackupPanel::auth(static fn (Request $request): bool => true);
 
-        $middleware = new Authenticate();
+        $middleware = new Authenticate;
         $request = Request::create('/backup');
         $expectedResponse = new Response('response');
 
@@ -48,7 +48,7 @@ class AuthTest extends TestCase
 
         LaravelBackupPanel::auth(static fn (Request $request): bool => false);
 
-        $middleware = new Authenticate();
+        $middleware = new Authenticate;
 
         $middleware->handle(
             Request::create('/backup'),
