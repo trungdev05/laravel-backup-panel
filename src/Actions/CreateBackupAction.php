@@ -16,6 +16,6 @@ final class CreateBackupAction
             ->onQueue(Config::string('laravel_backup_panel.queue'));
 
         return to_route('laravel-backup-panel.index')
-            ->with('success', __('laravel_backup_panel::panel.backup_queued'));
+            ->with('success', 'Creating a new backup in the background.');
     }
 }

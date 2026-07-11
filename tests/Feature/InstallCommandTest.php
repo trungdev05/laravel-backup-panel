@@ -27,11 +27,6 @@ class InstallCommandTest extends TestCase
         self::assertTrue(File::exists($directory.'/layout.blade.php'));
     }
 
-    public function test_install_command_publishes_translations(): void
-    {
-        self::assertTrue(File::exists(lang_path('vendor/laravel_backup_panel/en/panel.php')));
-    }
-
     public function test_install_command_publishes_config(): void
     {
         self::assertTrue(File::exists(config_path('laravel_backup_panel.php')));
@@ -87,7 +82,6 @@ class InstallCommandTest extends TestCase
         foreach ([
             public_path('vendor/laravel_backup_panel'),
             resource_path('views/vendor/laravel_backup_panel'),
-            lang_path('vendor/laravel_backup_panel'),
         ] as $path) {
             if (File::exists($path)) {
                 File::deleteDirectory($path);

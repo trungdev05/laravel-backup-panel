@@ -27,9 +27,6 @@ class InstallCommand extends Command
         $this->comment('Publishing Laravel Backup Panel views...');
         $this->publishOrFail('laravel-backup-panel-views');
 
-        $this->comment('Publishing Laravel Backup Panel translations...');
-        $this->publishOrFail('laravel-backup-panel-translations');
-
         $this->comment('Publishing Laravel Backup Panel configuration...');
         $this->publishOrFail('laravel-backup-panel-config');
 

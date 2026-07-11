@@ -40,6 +40,15 @@ class InterfaceTest extends TestCase
             ->assertViewHas('files', static fn (Collection $files): bool => $files->isEmpty());
     }
 
+    public function test_panel_uses_english_regardless_of_application_locale(): void
+    {
+        app()->setLocale('es');
+
+        $this->get('/backup')
+            ->assertSeeText('Laravel Backup Panel')
+            ->assertSeeText('Create Backup');
+    }
+
     public function test_creating_backups_queues_each_supported_option(): void
     {
         Queue::fake();

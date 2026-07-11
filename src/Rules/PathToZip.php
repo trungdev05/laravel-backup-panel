@@ -20,6 +20,6 @@ class PathToZip implements ValidationRule
 
     public function message(): string
     {
-        return __('laravel_backup_panel::panel.validation.path_to_zip');
+        return 'It must be a zip file';
     }
 }

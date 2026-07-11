@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ __('laravel_backup_panel::panel.title') }}</title>
+    <title>Laravel Backup Panel</title>
 
     <link href="{{ asset('vendor/laravel_backup_panel/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/laravel_backup_panel/css/app.css') }}" rel="stylesheet">

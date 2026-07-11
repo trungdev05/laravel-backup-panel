@@ -49,7 +49,6 @@ $ php artisan laravel-backup-panel:install
 This will do the following:
 - place Bootstrap CSS and JavaScript files into `public/vendor/laravel_backup_panel` directory
 - place Blade templates into `resources/views/vendor/laravel_backup_panel` directory
-- place English translations into `lang/vendor/laravel_backup_panel` directory
 - add config file `config/laravel_backup_panel.php`
 - register service provider in `bootstrap/providers.php`
 
@@ -60,14 +59,15 @@ When updating the package, do not forget to re-publish resources:
 ```bash
 $ php artisan vendor:publish --tag=laravel-backup-panel-assets --force
 $ php artisan vendor:publish --tag=laravel-backup-panel-views --force
-$ php artisan vendor:publish --tag=laravel-backup-panel-translations --force
 ```
 
 ### Upgrading to 3.x
 
-3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets, views, and translations after upgrading; custom published Livewire views must be replaced with the new Blade views.
+3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets and views after upgrading; custom published Livewire views must be replaced with the new Blade views.
 
 ## Configuration
+
+The panel currently uses English-only UI text.
 
 You are free to tune CSS styles in the `public/vendor/laravel_backup_panel` directory and change the layout in the `resources/views/vendor/laravel_backup_panel` directory as you want.
 

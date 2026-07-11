@@ -30,10 +30,6 @@ class LaravelBackupPanelServiceProvider extends ServiceProvider
             ], 'laravel-backup-panel-views');
 
             $this->publishes([
-                __DIR__.'/../resources/lang' => lang_path('vendor/laravel_backup_panel'),
-            ], 'laravel-backup-panel-translations');
-
-            $this->publishes([
                 __DIR__.'/../stubs/LaravelBackupPanelServiceProvider.php.stub' => app_path('Providers/LaravelBackupPanelServiceProvider.php'),
             ], 'laravel-backup-panel-provider');
 
@@ -54,7 +50,6 @@ class LaravelBackupPanelServiceProvider extends ServiceProvider
         });
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel_backup_panel');
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laravel_backup_panel');
     }
 
     /**
