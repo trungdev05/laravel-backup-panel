@@ -7,8 +7,8 @@ Laravel Backup Panel is a Composer package that adds a Blade dashboard for manag
 and files, download or delete backups, and monitor storage disks.
 
 The package supports PHP 8.3+, Laravel 12.40–13, and Spatie Laravel Backup 10.
-Its primary integration points are the service providers, `routes/web.php`, HTTP
-controllers, queued backup job, published Blade/assets/configuration, and Testbench
+Its primary integration points are the service providers, `routes/web.php`, invokable
+HTTP actions, queued backup job, published Blade/assets/configuration, and Testbench
 feature tests.
 
 ## Non-negotiable data integrity rule

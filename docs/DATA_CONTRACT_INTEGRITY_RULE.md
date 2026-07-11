@@ -2,122 +2,121 @@
 
 ## Spirit (the 5 non-negotiables)
 
-- **The contract is the law:** TypeScript types, DTOs, and PHPDocs define truth. Code must match the contract—no “just in case” defensive checks.
-- **Single Source of Truth per field:** every field has exactly one authoritative source. If it’s missing/invalid, **fail fast** with a clear error.
-- **No fallbacks or compat hacks:** no multi-source probing (`??`, `||`), no legacy aliases, no guessing helpers, no shadow copies or hidden reconciliation.
-- **Boundary-only validation/normalization:** parsing, coercion, trimming, and shape-fixing happen only at boundaries (ingestion/request/DTO/validator/migration), not in UI/business/shared logic.
-- **Integrity violations must be loud and stopping:** no catch-and-ignore, no defaults that mask bad data, and no partial updates that can create inconsistent state—if atomicity isn’t guaranteed, the operation must fail.
+- **The contract is the law:** PHP native types, backed enums, PHPDocs, Form Request
+  validation, published configuration, and documented public interfaces define truth.
+  Code must match the contract—no “just in case” defensive checks.
+- **Single Source of Truth per field:** every field has exactly one authoritative
+  source. If it’s missing or invalid, **fail fast** with a clear error.
+- **No fallbacks or compat hacks:** no multi-source probing, legacy aliases, guessing
+  helpers, shadow copies, or hidden reconciliation.
+- **Boundary-only validation/normalization:** parsing, coercion, trimming, and
+  shape-fixing happen only at explicit boundaries such as Form Requests,
+  `prepareForValidation()`, DTO/value-object construction, published configuration,
+  or migrations—not in actions, jobs, repositories, or Blade views.
+- **Integrity violations must be loud and stopping:** no catch-and-ignore, no
+  defaults that mask bad data, and no partial updates that can create inconsistent
+  state. If atomicity is unavailable, the operation must fail.
 
 ---
 
 ## Rules
 
 ### 1) Single Source of Truth (SST)
-Every field must have exactly one authoritative source.
 
-Forbidden: multi-source fallback (e.g., `a ?? b`) for the same field.
+Every field has exactly one authoritative source. A field must not probe multiple
+inputs such as `$primary ?? $secondary` for the same meaning.
 
-If the authoritative source is missing/invalid → fail fast with a clear error.
+If the source is missing or invalid, reject it at its boundary or throw a clear error.
 
-### 2) No legacy / compat fields
-Forbidden: duplicate field names for the same meaning (e.g., `lotSize` and `lot_size`).
+### 2) No legacy or compatibility fields
 
-Forbidden: compat fallbacks like `product?.lot_size ?? product?.lotSize`.
+Do not add duplicate names for the same meaning, aliases, deprecated request keys, or
+compatibility fallbacks. This package is pre-release: when a contract changes, update
+all in-repository producers and consumers together and remove the superseded contract.
 
-When renaming a field: migrate data → update code → remove old field/alias immediately.
+### 3) No multi-source normalization helpers
 
-### 3) Forbidden: multi-source “normalization helpers”
-Forbidden: helpers that probe multiple objects in sequence (e.g., `normalizeProductId(lot, lotPlan, product)`).
+Do not create helpers that search several objects, config keys, request fields, or
+payload fields to discover a value. If ownership is unclear, make the contract
+explicit; do not guess.
 
-If the source is unclear → fail fast, do not guess.
+### 4) Maximum explicitness; no shadow flows
 
-### 4) Maximum explicitness (no shadow flows)
-No hidden reconciliation logic.
+Do not retain shadow copies of contract data or reconcile values later. Configuration,
+request validation, queue payload construction, and view-data construction must each
+state their source and shape directly.
 
-Do not keep “shadow copies” of the same field across places and reconcile later.
+### 5) Nullability discipline
 
-No backward-compat hacks in core/shared logic.
+PHP types, enums, PHPDocs, validation rules, and configuration contracts define
+nullability. Do not add `?->`, `isset`, `empty`, `== null`, or equivalent checks for
+values declared required. Optionality must be declared at the boundary; checks for an
+explicitly nullable or optional value are permitted only where that contract is used.
 
-### 5) Nullability discipline (TS types / PHPDocs are law)
-Interfaces/DTOs/PHPDocs define truth.
+### 6) No fallback defaults for runtime data
 
-Forbidden: defensive null/emptiness checks on fields declared non-null (e.g., `?.`, `?->`, `isset/empty`, `== null`) “just in case”.
+Do not use `??`, `?:`, or `||` to invent a value for required runtime data. A static,
+documented default in the published config file is allowed because it defines the
+installation contract. It must not become a fallback for a missing or invalid request,
+queue payload, Spatie value, or host configuration value.
 
-If reality contradicts the contract: fix the contract + migrate/fix data, not defensive code.
+### 7) Normalize only at boundaries
 
-### 6) Ban unnecessary `??` and `||` when the contract is clear
-If a value is non-nullable / required by type or PHPDoc, you must not write:
+Do not use `trim()`, empty-value probing, or ad-hoc shape repair in actions, jobs,
+repositories, or views. If whitespace or empty-string handling is required, define it
+once in the Form Request or another explicit boundary and test that behavior there.
 
-- `x ?? default`
-- `x || default`
-- `x || fallbackText`
+### 8) UI strings and translation keys
 
-Defaults must not be used to mask bad/missing data.
+Do not hide a missing translation with a fallback UI string. A translated string uses
+one explicit key; missing keys must remain visible as an error during development.
 
-If the field is required and missing → throw / error (fail fast), don’t invent fallback values.
+### 9) No untyped package-owned data
 
-### 7) Ban “trim/empty probing” on data fields
-Absolutely forbidden: using `trim(value)` (or equivalent) to decide emptiness/validity for data fields.
+Do not introduce `mixed`, unshaped arrays, or unvalidated raw input for a
+package-owned public API, queue payload, or view-data field. Framework callback
+signatures that require `mixed` may accept it only at their boundary and must validate
+or narrow it immediately.
 
-No “normalize by trimming” inside business/shared UI logic.
+### 10) DTOs and projections establish contracts, not glue
 
-If whitespace normalization is needed → do it once at ingest/validation/migration, explicitly.
+Create a DTO, resource, or projection only when it defines a named boundary or public
+contract. Do not create per-call “minimal” types or arrays solely to rename or copy
+fields that already have an authoritative object or contract.
 
-### 8) UI strings: no i18n fallback hacks
-Forbidden: `t('key') || 'fallback text'`.
+### 11) No backend-to-view key remapping glue
 
-Missing translation keys must be treated as errors (don’t hide them).
+Do not map equivalent fields between actions and Blade just because their keys differ.
+Align the package contract and update every producer and consumer. A deliberately
+named view-data contract is allowed, but it must be its only representation.
 
-### 9) TypeScript: any is banned
-Absolute ban on `any`.
+### 12) No accidental shadow state
 
-Use `unknown` + explicit validation/parsing, or define correct types.
+Do not copy contract values into session data, untyped arrays, mutable static state, or
+pass-through variables unless that storage is the explicit contract boundary. A local
+variable is allowed when it gives a value a domain meaning, is reused, or records a
+validated boundary result.
 
-### 10) Don’t create “compact/minimal types” unless necessary
-Forbidden: creating “minimal/compact” types (or remapped DTOs) solely to return/read fewer fields.
+### 13) No unnecessary parsing or coercion
 
-If you only need a few fields, using the larger type/model is fine—return/pass the original object unchanged.
+Do not cast or parse a value that already has the required type. Parsing and coercion
+are allowed only at explicit boundaries and must produce the declared PHP type, enum,
+or value object.
 
-Example: If `Product` has `id, name, unit_id, created_at, updated_at`, and FE only needs `id` and `name`, do **not** return:
-- `product_id = product->id`
-- `product_name = product->name`
+### 14) Keep validation and normalization out of business and UI logic
 
-Return `product` as-is and let FE read `product.id` and `product.name`.
+Actions, jobs, repositories, and Blade views consume validated, typed data. They must
+not patch missing fields, normalize shapes, trim strings, or coerce scalar values.
 
-### 11) No BE→FE key remapping glue
-Forbidden: per-call mapping only because keys differ (e.g., `productId = data.product_id`).
+### 15) No catch-and-ignore on integrity failures
 
-Fix via contract/schema alignment + migration, not ad-hoc mapping at call sites.
+Do not swallow errors around required data access or an integrity-sensitive operation.
+Report the failure or let it propagate; never return `null`, an empty value, or a
+success response that conceals a failed operation.
 
-### 12) No pointless intermediate variables
-Forbidden: introducing pass-through variables that add no reuse/clarity/guarding.
+### 16) Prefer framework primitives
 
-Prefer `fn(obj.id)` over `const id = obj.id; fn(id)` unless you reuse it, rename for meaning, or guard/validate it.
-
----
-
-## Additional bans to keep data code clean (requested: D, E, H, I)
-
-### 13) Ban unnecessary parsing/coercion (D)
-Forbidden: ad-hoc parsing/coercion when the type is already correct (e.g., `parseInt(id)`, `String(id)`, `Number(x)`, `+x`, date parsing), “just in case”.
-
-Conversions/parsing are allowed only at boundaries (DTO construction, request parsing, ingestion), and must be explicit and centralized.
-
-### 14) Keep validation/normalization out of UI/business logic (E)
-Forbidden: components/services “fixing” payloads (normalizing shapes, patching missing fields, trimming, coercing).
-
-Validation/normalization belongs to boundary layers (parser/DTO/validator/migration), not inside core/shared logic.
-
-### 15) Ban catch-and-ignore on data integrity (H)
-Forbidden: swallowing errors around required data access:
-
-```ts
-try { ... } catch { return null }
-```
-
-### 16) Prefer framework primitives over custom helpers
-Do not introduce custom helper functions for behavior already provided by the framework.
-
-Use built-in framework mechanisms first (for example, Laravel `Validator` for data validation) instead of inventing parallel validation helpers.
-
-Only add custom helpers when there is a clear gap in framework capabilities and the helper is reused meaningfully.
+Use Laravel and Composer ecosystem primitives before custom helpers. Use Form Requests
+and validation rules for HTTP input, config accessors for typed configuration, enums
+for package-owned states, and Laravel queue facilities for jobs. Add a custom helper
+only for a genuine gap with meaningful reuse.
