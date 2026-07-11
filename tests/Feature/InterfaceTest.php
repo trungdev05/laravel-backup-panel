@@ -3,10 +3,15 @@
 namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Support\Collection;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
+use PavelMironchik\LaravelBackupPanel\Actions\CreateBackupAction;
+use PavelMironchik\LaravelBackupPanel\Actions\DeleteBackupAction;
+use PavelMironchik\LaravelBackupPanel\Actions\DownloadBackupAction;
+use PavelMironchik\LaravelBackupPanel\Actions\ShowBackupPanelAction;
 use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
 use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
 use PavelMironchik\LaravelBackupPanel\LaravelBackupPanel;
@@ -14,6 +19,14 @@ use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
 
 class InterfaceTest extends TestCase
 {
+    public function test_routes_use_invokable_actions(): void
+    {
+        $this->assertRouteUses('laravel-backup-panel.index', ShowBackupPanelAction::class);
+        $this->assertRouteUses('laravel-backup-panel.backups.store', CreateBackupAction::class);
+        $this->assertRouteUses('laravel-backup-panel.backups.download', DownloadBackupAction::class);
+        $this->assertRouteUses('laravel-backup-panel.backups.destroy', DeleteBackupAction::class);
+    }
+
     public function test_panel_is_served_at_configured_path(): void
     {
         $this->get('/backup')->assertOk();
@@ -108,5 +121,16 @@ class InterfaceTest extends TestCase
         LaravelBackupPanel::auth(fn (): bool => true);
 
         app()->instance('path.public', __DIR__.'/../../public');
+    }
+
+    /**
+     * @param class-string $action
+     */
+    private function assertRouteUses(string $name, string $action): void
+    {
+        $route = app('router')->getRoutes()->getByName($name);
+
+        self::assertInstanceOf(Route::class, $route);
+        self::assertSame($action.'@__invoke', $route->getAction('uses'));
     }
 }
