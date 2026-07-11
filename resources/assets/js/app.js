@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const confirmationForm = document.getElementById('laravel-backup-panel-delete-confirmation');
     const message = document.querySelector('[data-laravel-backup-panel-delete-message]');
 
-    if (!(modalElement instanceof HTMLElement) || !(confirmationForm instanceof HTMLFormElement) || !(message instanceof HTMLElement)) {
+    if (!(modalElement instanceof HTMLElement) || !(confirmationForm instanceof HTMLFormElement) || !(message instanceof HTMLElement) || message.dataset.messageTemplate === undefined) {
         throw new Error('Laravel Backup Panel delete confirmation markup is invalid.');
     }
 
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             confirmationForm.action = form.action;
-            message.textContent = `Are you sure you want to delete ${backupName}?`;
+            message.textContent = message.dataset.messageTemplate.replace(':backup', backupName);
             modal.show();
         });
     });

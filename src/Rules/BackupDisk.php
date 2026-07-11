@@ -21,6 +21,6 @@ class BackupDisk implements ValidationRule
 
     public function message(): string
     {
-        return 'Current disk is not configured as a backup disk';
+        return __('laravel_backup_panel::panel.validation.backup_disk');
     }
 }

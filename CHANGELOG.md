@@ -8,6 +8,9 @@ All notable changes to `laravel-backup-panel` will be documented in this file
 - Use one explicit Spatie Backup contract without compatibility adapters
 - Replace Livewire with server-rendered Blade views and progressive JavaScript
 - Upgrade bundled assets to local Bootstrap 5.3.8 and remove remote frontend dependencies
+- Deny dashboard access safely until its application authorization provider is registered
+- Allow application-specific route middleware without removing package authorization
+- Add translatable UI, validation, and flash-message strings
 
 ## 2.2.0 - 2022-05-05
 

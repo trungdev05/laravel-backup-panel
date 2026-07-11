@@ -23,6 +23,6 @@ final readonly class DeleteBackupAction
         throw_if($backup->exists(), \RuntimeException::class, 'Backup deletion failed.');
 
         return to_route('laravel-backup-panel.index', ['disk' => $disk])
-            ->with('success', 'Backup deleted.');
+            ->with('success', __('laravel_backup_panel::panel.backup_deleted'));
     }
 }

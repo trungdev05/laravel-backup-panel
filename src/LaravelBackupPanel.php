@@ -12,7 +12,7 @@ final class LaravelBackupPanel
      *
      * @var Closure(Request): bool
      */
-    public static Closure $authUsing;
+    private static Closure $authUsing;
 
     /**
      * Determine if the given request can access the Laravel Backup Panel dashboard.

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel Backup Panel</title>
+    <title>{{ __('laravel_backup_panel::panel.title') }}</title>
 
     <link href="{{ asset('vendor/laravel_backup_panel/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('vendor/laravel_backup_panel/css/app.css') }}" rel="stylesheet">

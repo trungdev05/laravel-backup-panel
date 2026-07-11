@@ -11,6 +11,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AuthTest extends TestCase
 {
+    public function test_package_defaults_to_denied_access(): void
+    {
+        self::assertFalse(LaravelBackupPanel::check(Request::create('/backup')));
+    }
+
     public function test_authentication_callback_works(): void
     {
         $adminRequest = Request::create('/backup');

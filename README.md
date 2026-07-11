@@ -49,6 +49,7 @@ $ php artisan laravel-backup-panel:install
 This will do the following:
 - place Bootstrap CSS and JavaScript files into `public/vendor/laravel_backup_panel` directory
 - place Blade templates into `resources/views/vendor/laravel_backup_panel` directory
+- place English translations into `lang/vendor/laravel_backup_panel` directory
 - add config file `config/laravel_backup_panel.php`
 - register service provider in `bootstrap/providers.php`
 
@@ -59,11 +60,12 @@ When updating the package, do not forget to re-publish resources:
 ```bash
 $ php artisan vendor:publish --tag=laravel-backup-panel-assets --force
 $ php artisan vendor:publish --tag=laravel-backup-panel-views --force
+$ php artisan vendor:publish --tag=laravel-backup-panel-translations --force
 ```
 
 ### Upgrading to 3.x
 
-3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets and views after upgrading; custom published Livewire views must be replaced with the new Blade views.
+3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets, views, and translations after upgrading; custom published Livewire views must be replaced with the new Blade views.
 
 ## Configuration
 
@@ -82,26 +84,35 @@ Specify your desired queue name in `config/laravel_backup_panel.php` file:
 'queue' => 'dedicated_low_priority_queue',
 ```
 
+The dashboard authorization is fail-closed: it returns `403` until the service provider created by the install command is registered. Add application middleware when access must require an authenticated user, an ability, or a network restriction:
+
+```php
+'middleware' => ['auth', 'can:access-backup-panel'],
+```
+
 By default, you will only be able to access the dashboard in the `local` environment. 
 To change that, modify authorization gate in the `app/Providers/LaravelBackupPanelServiceProvider.php`:
 
 ```php
+use App\Models\User;
+
 /**
  * Register the Laravel Backup Panel gate.
  *
  * This gate determines who can access Laravel Backup Panel in non-local environments.
  *
- * @return void
  */
-protected function gate()
+protected function gate(): void
 {
-    Gate::define('viewLaravelBackupPanel', function ($user) {
+    Gate::define('viewLaravelBackupPanel', static function (User $user): bool {
         return in_array($user->email, [
             'admin@your-site.com',
         ]);
     });
 }
 ```
+
+The `middleware` list is appended after the package's mandatory `web` and authorization middleware; it cannot remove package authorization.
 
 ## Usage
 
