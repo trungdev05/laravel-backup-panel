@@ -2,17 +2,23 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Str;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 
-class PathToZip implements Rule
+class PathToZip implements ValidationRule
 {
-    public function passes($attribute, $value)
+    /**
+     * @param  Closure(string, string|null=): PotentiallyTranslatedString  $fail
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return Str::endsWith($value, '.zip');
+        if (! is_string($value) || ! str_ends_with($value, '.zip')) {
+            $fail($this->message());
+        }
     }
 
-    public function message()
+    public function message(): string
     {
         return 'It must be a zip file';
     }

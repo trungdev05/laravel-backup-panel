@@ -2,23 +2,21 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Tests;
 
-use Illuminate\Foundation\Application;
-use Livewire\LivewireServiceProvider;
 use PavelMironchik\LaravelBackupPanel\LaravelBackupPanelServiceProvider;
+use Spatie\Backup\BackupServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
     /**
      * Get package providers.
      *
-     * @param  Application  $app
-     * @return array
+     * @return array<int, class-string>
      */
-    protected function getPackageProviders($app)
+    protected function getPackageProviders(mixed $app): array
     {
         return [
             LaravelBackupPanelServiceProvider::class,
-            LivewireServiceProvider::class,
+            BackupServiceProvider::class,
         ];
     }
 }

@@ -3,40 +3,40 @@
 namespace PavelMironchik\LaravelBackupPanel\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Console\Command;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use Spatie\Backup\Tasks\Backup\BackupJobFactory;
+use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
+use PavelMironchik\LaravelBackupPanel\Support\BackupFilename;
+use RuntimeException;
 
-class CreateBackupJob implements ShouldQueue
+class CreateBackupJob implements ShouldBeUnique, ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
 
-    protected $option;
+    public int $tries = 1;
 
-    public function __construct($option = '')
+    public function __construct(
+        public BackupMode $mode,
+        public BackupFilename $filename,
+    ) {}
+
+    public function uniqueId(): string
     {
-        $this->option = $option;
+        return 'laravel-backup-panel:backup';
     }
 
-    public function handle()
+    public function handle(BackupCommandRunner $backupCommandRunner): void
     {
-        $backupJob = BackupJobFactory::createFromArray(config('backup'));
+        $exitCode = $backupCommandRunner->run($this->mode, $this->filename);
 
-        if ($this->option === 'only-db') {
-            $backupJob->dontBackupFilesystem();
+        if ($exitCode !== Command::SUCCESS) {
+            $this->fail(new RuntimeException('Spatie backup command failed.'));
         }
-
-        if ($this->option === 'only-files') {
-            $backupJob->dontBackupDatabases();
-        }
-
-        if (! empty($this->option)) {
-            $prefix = str_replace('_', '-', $this->option).'-';
-
-            $backupJob->setFilename($prefix.date('Y-m-d-H-i-s').'.zip');
-        }
-
-        $backupJob->run();
     }
 }

@@ -1,10 +1,7 @@
 # Laravel Backup Panel
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
-[![Build Status](https://img.shields.io/travis/pavel-mironchik/laravel-backup-panel/master.svg?style=flat-square)](https://travis-ci.org/pavel-mironchik/laravel-backup-panel)
 [![Tests](https://github.com/pavel-mironchik/laravel-backup-panel/workflows/Tests/badge.svg)](https://github.com/pavel-mironchik/laravel-backup-panel/actions?query=workflow%3ATests)
-[![Quality Score](https://img.shields.io/scrutinizer/g/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://scrutinizer-ci.com/g/pavel-mironchik/laravel-backup-panel)
-[![StyleCI](https://github.styleci.io/repos/231844000/shield?branch=master)](https://github.styleci.io/repos/231844000)
 [![Total Downloads](https://img.shields.io/packagist/dt/pavel-mironchik/laravel-backup-panel.svg?style=flat-square)](https://packagist.org/packages/pavel-mironchik/laravel-backup-panel)
 
 Laravel Backup Panel provides a dashboard for [spatie/laravel-backup](https://github.com/spatie/laravel-backup) package.
@@ -26,17 +23,15 @@ Also, some users reported about hitting a rate limit of Dropbox API._
 
 ## Requirements
 
-Make sure you meet [the requirements for installing spatie/laravel-backup](https://docs.spatie.be/laravel-backup/v6/requirements).
-Since this package requires the spatie/laravel-backup version 6.11.12 or higher, it also requires PHP 7.3 and Laravel 6.0 or higher.
+Laravel Backup Panel 3 requires PHP 8.3 or newer, Laravel 12.40 or 13, and spatie/laravel-backup 10.
 
-### Using an older version of PHP, Laravel, spatie/laravel-backup?
+### Using an older version of PHP, Laravel, or spatie/laravel-backup?
 
-Just use the older version of this package, see the `v1` branch.
+Use the 2.x release line of this package.
 
 ## Installation
 
-First you must install [spatie/laravel-backup](https://docs.spatie.be/laravel-backup) into your Laravel app. 
-The installation instructions are [here](https://docs.spatie.be/laravel-backup/v6/installation-and-setup). 
+First install [spatie/laravel-backup](https://github.com/spatie/laravel-backup) into your Laravel app.
 When successful, running `php artisan backup:run` on the terminal should create a backup and `php artisan backup:list` should return a list with an overview of all backup disks.
 
 You may use composer to install Laravel Backup Panel into your project:
@@ -52,10 +47,10 @@ $ php artisan laravel-backup-panel:install
 ```
 
 This will do the following:
-- place CSS files into `public/vendor/laravel_backup_panel` directory
+- place Bootstrap CSS and JavaScript files into `public/vendor/laravel_backup_panel` directory
 - place Blade templates into `resources/views/vendor/laravel_backup_panel` directory
 - add config file `config/laravel_backup_panel.php`
-- register service provider `app/Providers/LaravelBackupPanelServiceProvider.php`
+- register service provider in `bootstrap/providers.php`
 
 ### Updating
 
@@ -66,11 +61,13 @@ $ php artisan vendor:publish --tag=laravel-backup-panel-assets --force
 $ php artisan vendor:publish --tag=laravel-backup-panel-views --force
 ```
 
-### Upgrading
+### Upgrading to 3.x
 
-See the [Wiki](https://github.com/pavel-mironchik/laravel-backup-panel/wiki/Upgrade-Guide) for the instructions how to upgrade from version 1.
+3.x removes Livewire, jQuery, Toastify, and remote frontend assets. Re-publish assets and views after upgrading; custom published Livewire views must be replaced with the new Blade views.
 
 ## Configuration
+
+The panel currently uses English-only UI text.
 
 You are free to tune CSS styles in the `public/vendor/laravel_backup_panel` directory and change the layout in the `resources/views/vendor/laravel_backup_panel` directory as you want.
 
@@ -80,33 +77,43 @@ Laravel Backup Panel exposes a dashboard at `/backup`. Change it in `config/lara
 'path' => 'backup',
 ```
 
-Sometimes you don't want to run backup jobs on the same queue as user actions and things that is more time critical. 
-Specify your desired queue name in `config/laravel_backup_panel.php` file:
+The panel requires non-empty `path` and `queue` strings. Its default queue connection must use a driver other than `sync` or `null`, and a worker must consume the configured queue. Invalid panel or queue configuration fails before a request is accepted, so the success message always represents an asynchronous request. It permits one backup request at a time through Laravel's unique-job lock; multi-worker or multi-server deployments must use a shared cache store that supports atomic locks. Sometimes you don't want to run backup jobs on the same queue as user actions and things that is more time critical. Specify your desired queue name in `config/laravel_backup_panel.php` file:
 
 ```php
 'queue' => 'dedicated_low_priority_queue',
+```
+
+The dashboard authorization is fail-closed: it returns `403` until the service provider created by the install command is registered. Application middleware runs before package authorization, so it can establish a guard and enforce an authenticated user, an ability, or a network restriction:
+
+```php
+'middleware' => ['auth', 'can:access-backup-panel'],
 ```
 
 By default, you will only be able to access the dashboard in the `local` environment. 
 To change that, modify authorization gate in the `app/Providers/LaravelBackupPanelServiceProvider.php`:
 
 ```php
+use App\Models\User;
+
 /**
  * Register the Laravel Backup Panel gate.
  *
  * This gate determines who can access Laravel Backup Panel in non-local environments.
  *
- * @return void
  */
-protected function gate()
+protected function gate(): void
 {
-    Gate::define('viewLaravelBackupPanel', function ($user) {
+    Gate::define('viewLaravelBackupPanel', static function (User $user): bool {
         return in_array($user->email, [
             'admin@your-site.com',
         ]);
     });
 }
 ```
+
+The `middleware` list must contain only non-empty strings. It runs after the package's mandatory `web` middleware and before package authorization; it cannot remove package authorization.
+
+The panel manages exactly the backup declared by `backup.backup`: `backup.monitor_backups` must contain exactly one entry with the same `name` and the same ordered `disks` list. This makes health status, listing, download, and deletion refer to one backup contract. Additional monitor entries for other applications are allowed but are not shown in the panel.
 
 ## Usage
 

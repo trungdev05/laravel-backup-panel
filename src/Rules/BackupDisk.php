@@ -2,18 +2,24 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
+use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
 
-class BackupDisk implements Rule
+class BackupDisk implements ValidationRule
 {
-    public function passes($attribute, $value)
+    /**
+     * @param  Closure(string, string|null=): PotentiallyTranslatedString  $fail
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $configuredBackupDisks = config('backup.backup.destination.disks');
-
-        return in_array($value, $configuredBackupDisks);
+        if (! is_string($value) || ! in_array($value, app(BackupPanelConfiguration::class)->disks(), true)) {
+            $fail($this->message());
+        }
     }
 
-    public function message()
+    public function message(): string
     {
         return 'Current disk is not configured as a backup disk';
     }
