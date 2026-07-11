@@ -6,11 +6,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
 use Spatie\Backup\BackupDestination\Backup;
 use Spatie\Backup\BackupDestination\BackupDestination;
-use Spatie\Backup\Config\Config as BackupConfig;
 
 final readonly class BackupDestinationRepository
 {
-    public function __construct(private BackupConfig $config) {}
+    public function __construct(private BackupPanelConfiguration $configuration) {}
 
     /**
      * @return Collection<int, Backup>
@@ -32,6 +31,6 @@ final readonly class BackupDestinationRepository
 
     private function backupDestination(string $disk): BackupDestination
     {
-        return BackupDestination::create($disk, $this->config->backup->name);
+        return BackupDestination::create($disk, $this->configuration->backupName());
     }
 }

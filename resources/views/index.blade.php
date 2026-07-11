@@ -71,11 +71,7 @@
                         @endforeach
                     </div>
                 @endif
-                @if($activeDisk === null)
-                    <button class="btn btn-primary btn-sm ms-auto px-3" type="button" disabled>Refresh</button>
-                @else
-                    <a class="btn btn-primary btn-sm ms-auto px-3" href="{{ route('laravel-backup-panel.index', ['disk' => $activeDisk]) }}">Refresh</a>
-                @endif
+                <a class="btn btn-primary btn-sm ms-auto px-3" href="{{ route('laravel-backup-panel.index', ['disk' => $activeDisk]) }}">Refresh</a>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover mb-0">

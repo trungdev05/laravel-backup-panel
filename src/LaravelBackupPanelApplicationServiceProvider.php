@@ -29,7 +29,7 @@ class LaravelBackupPanelApplicationServiceProvider extends ServiceProvider
                 return true;
             }
 
-            return Gate::check('viewLaravelBackupPanel', [$request->user()]);
+            return Gate::check('viewLaravelBackupPanel');
         });
     }
 

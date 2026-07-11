@@ -15,9 +15,9 @@ class MiddlewareTest extends TestCase
         self::assertInstanceOf(Route::class, $route);
         self::assertSame([
             'web',
-            Authenticate::class,
             'auth',
             'can:access-backup-panel',
+            Authenticate::class,
         ], $route->middleware());
     }
 

@@ -77,14 +77,13 @@ Laravel Backup Panel exposes a dashboard at `/backup`. Change it in `config/lara
 'path' => 'backup',
 ```
 
-Sometimes you don't want to run backup jobs on the same queue as user actions and things that is more time critical. 
-Specify your desired queue name in `config/laravel_backup_panel.php` file:
+The panel requires non-empty `path` and `queue` strings. Its default queue connection must use a driver other than `sync` or `null`, and a worker must consume the configured queue. Invalid panel or queue configuration fails before a request is accepted, so the success message always represents an asynchronous request. It permits one backup request at a time through Laravel's unique-job lock; multi-worker or multi-server deployments must use a shared cache store that supports atomic locks. Sometimes you don't want to run backup jobs on the same queue as user actions and things that is more time critical. Specify your desired queue name in `config/laravel_backup_panel.php` file:
 
 ```php
 'queue' => 'dedicated_low_priority_queue',
 ```
 
-The dashboard authorization is fail-closed: it returns `403` until the service provider created by the install command is registered. Add application middleware when access must require an authenticated user, an ability, or a network restriction:
+The dashboard authorization is fail-closed: it returns `403` until the service provider created by the install command is registered. Application middleware runs before package authorization, so it can establish a guard and enforce an authenticated user, an ability, or a network restriction:
 
 ```php
 'middleware' => ['auth', 'can:access-backup-panel'],
@@ -112,7 +111,9 @@ protected function gate(): void
 }
 ```
 
-The `middleware` list is appended after the package's mandatory `web` and authorization middleware; it cannot remove package authorization.
+The `middleware` list must contain only non-empty strings. It runs after the package's mandatory `web` middleware and before package authorization; it cannot remove package authorization.
+
+The panel manages exactly the backup declared by `backup.backup`: `backup.monitor_backups` must contain exactly one entry with the same `name` and the same ordered `disks` list. This makes health status, listing, download, and deletion refer to one backup contract. Additional monitor entries for other applications are allowed but are not shown in the panel.
 
 ## Usage
 

@@ -2,25 +2,83 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
 
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
 use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
+use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
+use PavelMironchik\LaravelBackupPanel\Support\BackupFilename;
+use PavelMironchik\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
 use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
+use RuntimeException;
 
 class CreateBackupJobTest extends TestCase
 {
     public function test_file_only_backup_creates_an_archive(): void
     {
-        (new CreateBackupJob(BackupMode::OnlyFiles))->handle();
+        (new CreateBackupJob(BackupMode::OnlyFiles, BackupFilename::create(BackupMode::OnlyFiles)))
+            ->handle(new SpatieBackupCommandRunner);
 
         $files = Storage::disk('local')->files('test-backups');
 
         self::assertCount(1, $files);
         self::assertIsString($files[0]);
         self::assertMatchesRegularExpression(
-            '/^test-backups\/only-files-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\.zip$/',
+            '/^test-backups\/\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}-only-files-[0-9A-HJKMNP-TV-Z]{26}\.zip$/',
             $files[0],
         );
+    }
+
+    public function test_backup_job_runs_the_spatie_command_with_its_mode_and_filename(): void
+    {
+        $filename = BackupFilename::create(BackupMode::OnlyFiles);
+
+        $runner = new class implements BackupCommandRunner
+        {
+            public ?BackupMode $mode = null;
+
+            public ?BackupFilename $filename = null;
+
+            public function run(BackupMode $mode, BackupFilename $filename): int
+            {
+                $this->mode = $mode;
+                $this->filename = $filename;
+
+                return Command::SUCCESS;
+            }
+        };
+
+        (new CreateBackupJob(BackupMode::OnlyFiles, $filename))->handle($runner);
+
+        self::assertSame(BackupMode::OnlyFiles, $runner->mode);
+        self::assertSame($filename, $runner->filename);
+    }
+
+    public function test_backup_job_marks_the_queue_job_as_failed_when_the_spatie_command_fails(): void
+    {
+        $filename = BackupFilename::create(BackupMode::OnlyDatabase);
+
+        $runner = new class implements BackupCommandRunner
+        {
+            public function run(BackupMode $mode, BackupFilename $filename): int
+            {
+                return Command::FAILURE;
+            }
+        };
+
+        $job = new CreateBackupJob(BackupMode::OnlyDatabase, $filename);
+
+        $job->withFakeQueueInteractions()->handle($runner);
+
+        $job->assertFailedWith(RuntimeException::class);
+    }
+
+    public function test_backup_job_has_one_shared_unique_lock(): void
+    {
+        $job = new CreateBackupJob(BackupMode::Full, BackupFilename::create(BackupMode::Full));
+
+        self::assertSame('laravel-backup-panel:backup', $job->uniqueId());
+        self::assertSame(1, $job->tries);
     }
 
     protected function getEnvironmentSetUp(mixed $app): void

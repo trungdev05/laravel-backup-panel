@@ -3,19 +3,24 @@
 namespace PavelMironchik\LaravelBackupPanel\Actions;
 
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Config;
 use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
 use PavelMironchik\LaravelBackupPanel\Http\Requests\CreateBackupRequest;
 use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
+use PavelMironchik\LaravelBackupPanel\Support\BackupFilename;
+use PavelMironchik\LaravelBackupPanel\Support\PanelConfiguration;
 
-final class CreateBackupAction
+final readonly class CreateBackupAction
 {
+    public function __construct(private PanelConfiguration $configuration) {}
+
     public function __invoke(CreateBackupRequest $request): RedirectResponse
     {
-        CreateBackupJob::dispatch(BackupMode::from($request->string('mode')->value()))
-            ->onQueue(Config::string('laravel_backup_panel.queue'));
+        $mode = BackupMode::from($request->string('mode')->value());
+
+        CreateBackupJob::dispatch($mode, BackupFilename::create($mode))
+            ->onQueue($this->configuration->queue());
 
         return to_route('laravel-backup-panel.index')
-            ->with('success', 'Creating a new backup in the background.');
+            ->with('success', 'Backup request is queued or already running.');
     }
 }

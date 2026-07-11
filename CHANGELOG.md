@@ -9,8 +9,11 @@ All notable changes to `laravel-backup-panel` will be documented in this file
 - Replace Livewire with server-rendered Blade views and progressive JavaScript
 - Upgrade bundled assets to local Bootstrap 5.3.8 and remove remote frontend dependencies
 - Deny dashboard access safely until its application authorization provider is registered
-- Allow application-specific route middleware without removing package authorization
-- Add translatable UI, validation, and flash-message strings
+- Run application-specific route middleware before package authorization without removing it
+- Keep UI, validation, and flash-message strings English-only
+- Require one monitor entry that exactly matches the managed backup name and disks
+- Run queued backups through Spatie's command lifecycle and prevent concurrent backup requests
+- Validate panel path, queue, middleware, and queue driver configuration at their boundaries
 
 ## 2.2.0 - 2022-05-05
 

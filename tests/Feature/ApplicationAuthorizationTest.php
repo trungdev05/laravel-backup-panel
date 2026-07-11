@@ -30,15 +30,12 @@ class ApplicationAuthorizationTest extends TestCase
         $user = new GenericUser(['id' => 1]);
         $this->actingAs($user);
 
-        $request = Request::create('/backup');
-        $request->setUserResolver(static fn (): GenericUser => $user);
-
         Gate::define(
             'viewLaravelBackupPanel',
-            static fn (GenericUser $authenticatedUser, GenericUser $requestUser): bool => $authenticatedUser->getAuthIdentifier() === $requestUser->getAuthIdentifier(),
+            static fn (GenericUser $authenticatedUser): bool => $authenticatedUser->getAuthIdentifier() === 1,
         );
 
-        self::assertTrue(LaravelBackupPanel::check($request));
+        self::assertTrue(LaravelBackupPanel::check(Request::create('/backup')));
     }
 
     /**

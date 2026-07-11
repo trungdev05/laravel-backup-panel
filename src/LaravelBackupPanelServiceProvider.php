@@ -3,11 +3,15 @@
 namespace PavelMironchik\LaravelBackupPanel;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use PavelMironchik\LaravelBackupPanel\Console\InstallCommand;
 use PavelMironchik\LaravelBackupPanel\Http\Middleware\Authenticate;
+use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
+use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
+use PavelMironchik\LaravelBackupPanel\Support\PanelConfiguration;
+use PavelMironchik\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
+use Spatie\Backup\Config\Config as BackupConfig;
 
 class LaravelBackupPanelServiceProvider extends ServiceProvider
 {
@@ -38,12 +42,14 @@ class LaravelBackupPanelServiceProvider extends ServiceProvider
             ]);
         }
 
+        $configuration = $this->app->make(PanelConfiguration::class);
+
         Route::group([
-            'prefix' => Config::string('laravel_backup_panel.path'),
+            'prefix' => $configuration->path(),
             'middleware' => [
                 'web',
+                ...$configuration->middleware(),
                 Authenticate::class,
-                ...Config::array('laravel_backup_panel.middleware'),
             ],
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
@@ -59,6 +65,13 @@ class LaravelBackupPanelServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__.'/../config/laravel_backup_panel.php', 'laravel_backup_panel');
+
+        $this->app->scoped(
+            BackupPanelConfiguration::class,
+            fn (): BackupPanelConfiguration => new BackupPanelConfiguration($this->app->make(BackupConfig::class)),
+        );
+        $this->app->scoped(PanelConfiguration::class, PanelConfiguration::class);
+        $this->app->bind(BackupCommandRunner::class, SpatieBackupCommandRunner::class);
 
         LaravelBackupPanel::auth(static fn (Request $request): bool => false);
     }
