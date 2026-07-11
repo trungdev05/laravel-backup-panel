@@ -2,8 +2,9 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
 
-use Illuminate\Foundation\Application;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
@@ -23,7 +24,7 @@ class InterfaceTest extends TestCase
         $this->get('/backup')
             ->assertViewIs('laravel_backup_panel::index')
             ->assertViewHas('activeDisk', null)
-            ->assertViewHas('files', fn ($files): bool => $files->isEmpty());
+            ->assertViewHas('files', static fn (Collection $files): bool => $files->isEmpty());
     }
 
     public function test_creating_backups_queues_each_supported_option(): void
@@ -85,12 +86,12 @@ class InterfaceTest extends TestCase
             ->assertNotFound();
     }
 
-    protected function getEnvironmentSetUp($app): void
+    protected function getEnvironmentSetUp(mixed $app): void
     {
-        $app['config']->set('app.key', 'base64:GhFMLyZ7x32kzu0How7wF8CIei+UC9Lc69Jcr+Z3sAk=');
-        $app['config']->set('backup.backup.name', 'test-backups');
-        $app['config']->set('backup.backup.destination.disks', ['local']);
-        $app['config']->set('backup.monitor_backups', [[
+        Config::set('app.key', 'base64:GhFMLyZ7x32kzu0How7wF8CIei+UC9Lc69Jcr+Z3sAk=');
+        Config::set('backup.backup.name', 'test-backups');
+        Config::set('backup.backup.destination.disks', ['local']);
+        Config::set('backup.monitor_backups', [[
             'name' => 'test-backups',
             'disks' => ['local'],
             'health_checks' => [],
@@ -106,13 +107,6 @@ class InterfaceTest extends TestCase
 
         LaravelBackupPanel::auth(fn (): bool => true);
 
-        $this->app->instance('path.public', __DIR__.'/../../public');
-    }
-
-    protected function tearDown(): void
-    {
-        LaravelBackupPanel::$authUsing = null;
-
-        parent::tearDown();
+        app()->instance('path.public', __DIR__.'/../../public');
     }
 }

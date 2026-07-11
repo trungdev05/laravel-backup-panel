@@ -13,54 +13,54 @@ class InstallCommandTest extends TestCase
     {
         $directory = public_path('vendor/laravel_backup_panel');
 
-        $this->assertTrue(File::exists($directory.'/css/app.css'));
-        $this->assertTrue(File::exists($directory.'/css/bootstrap.min.css'));
-        $this->assertTrue(File::exists($directory.'/js/app.js'));
-        $this->assertTrue(File::exists($directory.'/js/bootstrap.bundle.min.js'));
+        self::assertTrue(File::exists($directory.'/css/app.css'));
+        self::assertTrue(File::exists($directory.'/css/bootstrap.min.css'));
+        self::assertTrue(File::exists($directory.'/js/app.js'));
+        self::assertTrue(File::exists($directory.'/js/bootstrap.bundle.min.js'));
     }
 
     public function test_install_command_publishes_views(): void
     {
         $directory = resource_path('views/vendor/laravel_backup_panel');
 
-        $this->assertTrue(File::exists($directory.'/index.blade.php'));
-        $this->assertTrue(File::exists($directory.'/layout.blade.php'));
+        self::assertTrue(File::exists($directory.'/index.blade.php'));
+        self::assertTrue(File::exists($directory.'/layout.blade.php'));
     }
 
     public function test_install_command_publishes_config(): void
     {
-        $this->assertTrue(File::exists(config_path('laravel_backup_panel.php')));
+        self::assertTrue(File::exists(config_path('laravel_backup_panel.php')));
     }
 
     public function test_install_command_publishes_provider(): void
     {
-        $this->assertTrue(File::exists(app_path('Providers/LaravelBackupPanelServiceProvider.php')));
+        self::assertTrue(File::exists(app_path('Providers/LaravelBackupPanelServiceProvider.php')));
     }
 
     public function test_install_command_sets_namespace_for_provider(): void
     {
-        $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
-        $provider = file_get_contents(app_path('Providers/LaravelBackupPanelServiceProvider.php'));
+        $namespace = Str::replaceLast('\\', '', app()->getNamespace());
+        $provider = File::get(app_path('Providers/LaravelBackupPanelServiceProvider.php'));
 
-        $this->assertTrue(Str::contains($provider, "namespace {$namespace}\\Providers;"));
+        self::assertTrue(Str::contains($provider, "namespace {$namespace}\\Providers;"));
     }
 
     public function test_install_command_registers_provider(): void
     {
-        $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
-        $providers = file_get_contents(base_path('bootstrap/providers.php'));
+        $namespace = Str::replaceLast('\\', '', app()->getNamespace());
+        $providers = File::get(base_path('bootstrap/providers.php'));
 
-        $this->assertTrue(Str::contains($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
+        self::assertTrue(Str::contains($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
     }
 
     public function test_install_command_registers_the_provider_once(): void
     {
         Artisan::call('laravel-backup-panel:install');
 
-        $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
-        $providers = file_get_contents(base_path('bootstrap/providers.php'));
+        $namespace = Str::replaceLast('\\', '', app()->getNamespace());
+        $providers = File::get(base_path('bootstrap/providers.php'));
 
-        $this->assertSame(1, substr_count($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
+        self::assertSame(1, substr_count($providers, "{$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class"));
     }
 
     protected function setUp(): void
@@ -97,11 +97,11 @@ class InstallCommandTest extends TestCase
             }
         }
 
-        $namespace = Str::replaceLast('\\', '', $this->app->getNamespace());
+        $namespace = Str::replaceLast('\\', '', app()->getNamespace());
         $providersPath = base_path('bootstrap/providers.php');
-        $providers = file_get_contents($providersPath);
+        $providers = File::get($providersPath);
 
-        file_put_contents($providersPath, str_replace(
+        File::replace($providersPath, str_replace(
             "    {$namespace}\\Providers\\LaravelBackupPanelServiceProvider::class,".PHP_EOL,
             '',
             $providers

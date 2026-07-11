@@ -2,14 +2,21 @@
 
 namespace PavelMironchik\LaravelBackupPanel\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Translation\PotentiallyTranslatedString;
 use Spatie\Backup\Config\Config as BackupConfig;
 
-class BackupDisk implements Rule
+class BackupDisk implements ValidationRule
 {
-    public function passes($attribute, $value): bool
+    /**
+     * @param Closure(string, string|null=): PotentiallyTranslatedString $fail
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        return in_array($value, app(BackupConfig::class)->backup->destination->disks, true);
+        if (! is_string($value) || ! in_array($value, app(BackupConfig::class)->backup->destination->disks, true)) {
+            $fail($this->message());
+        }
     }
 
     public function message(): string

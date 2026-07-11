@@ -5,10 +5,12 @@ namespace PavelMironchik\LaravelBackupPanel\Http\Controllers;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Validation\Rule;
-use Illuminate\View\View;
 use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
 use PavelMironchik\LaravelBackupPanel\Jobs\CreateBackupJob;
 use PavelMironchik\LaravelBackupPanel\Rules\BackupDisk;
@@ -24,7 +26,7 @@ class BackupController
 {
     public function index(Request $request): View
     {
-        $request->validate([
+        Validator::validate($request->all(), [
             'disk' => ['nullable', 'string', new BackupDisk()],
         ]);
 
@@ -35,7 +37,7 @@ class BackupController
         $backupStatuses = $this->backupStatuses();
         $files = $activeDisk === null ? collect() : $this->filesForDisk($activeDisk);
 
-        return view('laravel_backup_panel::index', [
+        return ViewFacade::make('laravel_backup_panel::index', [
             'activeDisk' => $activeDisk,
             'backupStatuses' => $backupStatuses,
             'files' => $files,
@@ -44,7 +46,7 @@ class BackupController
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        Validator::validate($request->all(), [
             'mode' => ['bail', 'required', 'string', Rule::enum(BackupMode::class)],
         ]);
 
@@ -111,7 +113,7 @@ class BackupController
      */
     private function validatedFileInput(Request $request): array
     {
-        $request->validate([
+        Validator::validate($request->all(), [
             'disk' => ['bail', 'required', 'string', new BackupDisk()],
             'path' => ['bail', 'required', 'string', new PathToZip()],
         ]);
