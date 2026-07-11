@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Console;
+namespace Trungdev05\LaravelBackupPanel\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;

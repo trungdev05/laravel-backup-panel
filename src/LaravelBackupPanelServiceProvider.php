@@ -1,17 +1,17 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel;
+namespace Trungdev05\LaravelBackupPanel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use PavelMironchik\LaravelBackupPanel\Console\InstallCommand;
-use PavelMironchik\LaravelBackupPanel\Http\Middleware\Authenticate;
-use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
-use PavelMironchik\LaravelBackupPanel\Support\BackupPanelConfiguration;
-use PavelMironchik\LaravelBackupPanel\Support\PanelConfiguration;
-use PavelMironchik\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
 use Spatie\Backup\Config\Config as BackupConfig;
+use Trungdev05\LaravelBackupPanel\Console\InstallCommand;
+use Trungdev05\LaravelBackupPanel\Http\Middleware\Authenticate;
+use Trungdev05\LaravelBackupPanel\Support\BackupCommandRunner;
+use Trungdev05\LaravelBackupPanel\Support\BackupPanelConfiguration;
+use Trungdev05\LaravelBackupPanel\Support\PanelConfiguration;
+use Trungdev05\LaravelBackupPanel\Support\SpatieBackupCommandRunner;
 
 class LaravelBackupPanelServiceProvider extends ServiceProvider
 {

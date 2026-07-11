@@ -1,13 +1,13 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Auth\GenericUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use PavelMironchik\LaravelBackupPanel\LaravelBackupPanel;
-use PavelMironchik\LaravelBackupPanel\LaravelBackupPanelApplicationServiceProvider;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
+use Trungdev05\LaravelBackupPanel\LaravelBackupPanel;
+use Trungdev05\LaravelBackupPanel\LaravelBackupPanelApplicationServiceProvider;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class ApplicationAuthorizationTest extends TestCase
 {

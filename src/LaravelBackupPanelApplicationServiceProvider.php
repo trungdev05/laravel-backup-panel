@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel;
+namespace Trungdev05\LaravelBackupPanel;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;

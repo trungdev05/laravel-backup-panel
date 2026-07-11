@@ -1,0 +1,20 @@
+name: Question
+description: Ask for installation, configuration, or usage help.
+title: "[Question]: "
+labels:
+  - "type: question"
+  - "status: needs-triage"
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Include package version, environment, relevant configuration, and what you already tried. Remove secrets.
+    validations:
+      required: true
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true

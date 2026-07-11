@@ -1,11 +1,11 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Tests\Feature;
+namespace Trungdev05\LaravelBackupPanel\Tests\Feature;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PavelMironchik\LaravelBackupPanel\Tests\TestCase;
+use Trungdev05\LaravelBackupPanel\Tests\TestCase;
 
 class InstallCommandTest extends TestCase
 {

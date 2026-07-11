@@ -1,10 +1,10 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Http\Requests;
+namespace Trungdev05\LaravelBackupPanel\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
 
 final class CreateBackupRequest extends FormRequest
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Jobs;
+namespace Trungdev05\LaravelBackupPanel\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Console\Command;
@@ -8,10 +8,10 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
-use PavelMironchik\LaravelBackupPanel\Enums\BackupMode;
-use PavelMironchik\LaravelBackupPanel\Support\BackupCommandRunner;
-use PavelMironchik\LaravelBackupPanel\Support\BackupFilename;
 use RuntimeException;
+use Trungdev05\LaravelBackupPanel\Enums\BackupMode;
+use Trungdev05\LaravelBackupPanel\Support\BackupCommandRunner;
+use Trungdev05\LaravelBackupPanel\Support\BackupFilename;
 
 class CreateBackupJob implements ShouldBeUnique, ShouldQueue
 {

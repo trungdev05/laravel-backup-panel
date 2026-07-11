@@ -1,10 +1,10 @@
 <?php
 
-namespace PavelMironchik\LaravelBackupPanel\Actions;
+namespace Trungdev05\LaravelBackupPanel\Actions;
 
 use Illuminate\Http\RedirectResponse;
-use PavelMironchik\LaravelBackupPanel\Http\Requests\BackupFileRequest;
-use PavelMironchik\LaravelBackupPanel\Support\BackupDestinationRepository;
+use Trungdev05\LaravelBackupPanel\Http\Requests\BackupFileRequest;
+use Trungdev05\LaravelBackupPanel\Support\BackupDestinationRepository;
 
 final readonly class DeleteBackupAction
 {

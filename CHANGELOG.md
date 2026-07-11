@@ -4,6 +4,7 @@ All notable changes to `laravel-backup-panel` will be documented in this file
 
 ## 3.0.0 - Unreleased
 
+- Establish `trungdev05/laravel-backup-panel` as the package identity and rename the PHP namespace to `Trungdev05\\LaravelBackupPanel`
 - Add support for PHP 8.3+, Laravel 12.40 through 13, and spatie/laravel-backup 10
 - Use one explicit Spatie Backup contract without compatibility adapters
 - Replace Livewire with server-rendered Blade views and progressive JavaScript
